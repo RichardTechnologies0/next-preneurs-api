@@ -2,7 +2,7 @@ import mysql.connector
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from mysql.connector import connect, Error
-from transformers import pipeline
+
 from mysql.connector import pooling
 
 # Configurer un pool de connexions
@@ -249,7 +249,7 @@ def add_friends():
         except Exception as e:
             print(f"Erreur lors de la fermeture de la connexion : {e}")
 
-chat_idea = pipeline("text-generation", model="EleutherAI/gpt-neo-1.3B")
+#chat_idea = pipeline("text-generation", model="EleutherAI/gpt-neo-1.3B")
 
 @app.route('/api/chatAI', methods=['POST'])
 def process_idea():
