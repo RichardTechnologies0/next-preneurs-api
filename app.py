@@ -249,6 +249,39 @@ def add_friends():
         except Exception as e:
             print(f"Erreur lors de la fermeture de la connexion : {e}")
 
+chat_idea = pipeline("text-generation", model="EleutherAI/gpt-neo-1.3B")
+
+@app.route('/api/chatAI', methods=['POST'])
+def process_idea():
+    data = request.json
+    idea = data.get('idea')
+
+    if not idea:
+        return jsonify({"error": "Aucune idée valide n'a été fournie."}), 400
+
+    prompt = (
+        f"L'utilisateur a une idée entrepreneuriale : '{idea}'. "
+        "Proposez une description claire et détaillée de cette idée. "
+        "Incluez des conseils concrets pour la mettre en œuvre, comme : "
+        "1. Analyse de marché\n"
+        "2. Modèle économique\n"
+        "3. Stratégies de marketing\n"
+        "4. Étapes pour démarrer."
+    )
+
+    try:
+        print(f"Traitement de l'idée : {idea}")
+        response = chat_idea(prompt, max_length=200)
+        prediction = response[0]["generated_text"]
+
+        # Nettoyage de la réponse générée
+        cleaned_prediction = prediction.split(".")[1] + "."  # Prend la première phrase complète
+        return jsonify({"prediction": prediction})
+
+    except Exception as e:
+        print(f"Erreur : {str(e)}")
+        return jsonify({"error": f"Une erreur s'est produite : {str(e)}"}), 500
+
 
 if __name__ == '__main__':
     app.run()
