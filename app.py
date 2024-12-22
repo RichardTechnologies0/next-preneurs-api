@@ -2,7 +2,7 @@ import mysql.connector
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from mysql.connector import connect, Error
-
+from transformers import pipeline
 from mysql.connector import pooling
 
 # Configurer un pool de connexions
